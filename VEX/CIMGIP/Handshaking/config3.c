@@ -1,8 +1,7 @@
 #pragma config(Sensor, in2,    Potentiometer,  sensorPotentiometer)
 #pragma config(Sensor, in3,    LightSensor,    sensorReflection)
 #pragma config(Sensor, dgtl1,  estopBtn,       sensorTouch)
-#pragma config(Sensor, dgtl2,  Start,          sensorTouch)
-#pragma config(Sensor, dgtl9,  Red,            sensorLEDtoVCC)
+#pragma config(Sensor, dgtl9,  Red,            sensorNone)
 #pragma config(Sensor, dgtl10, Green,          sensorLEDtoVCC)
 #pragma config(Sensor, dgtl11, handshakeIn,    sensorTouch)
 #pragma config(Sensor, dgtl12, handshakeOut,   sensorLEDtoVCC)
@@ -31,23 +30,21 @@ task main()
     // Start the emergency stop task
 	startTask(estop);
 
-	// Set LEDs
-	turnLEDOn(handshakeOut);
-	turnLEDOn(Red);
-	turnLEDOff(Green);
-    
-	// Variable setter
+    // Variable setter
     int runCount;
     runCount = 0;
-    int hasTicked;
-    hasTicked = 0;
+
+    // Set LEDs
+    turnLEDOn(handshakeOut);
+  	turnLEDOn(Red);
+  	turnLEDOff(Green);
 
     // Run code if count is less than 4
 	while(runCount < 4)
 	{
-		// Check for start button or backwards handshake signal
-		if(SensorValue(Start) == 1 || SensorValue(handshakeIn) == 1) {
-			// Set LEDs
+		// Check start button
+		if(SensorValue(handshakeIn) == 1)
+		{
 			turnLEDOn(Green);
 			turnLEDOff(Red);
 			wait(5);
@@ -59,9 +56,9 @@ task main()
 
 			wait(10);
 
-       while(hasTicked != 1) {
-			// Detect if beaker is still in place
-			if(SensorValue(LightSensor) <= 100) {
+            // Detect if beaker is still in place
+			if(SensorValue[LightSensor] <= 20)
+			{
 				wait(2);
 
                 // Turn motor to 180 degrees using potentiometer
@@ -71,22 +68,26 @@ task main()
 
 				wait(2);
 
-                // Turn motor back to 0
+                // Turn motor back to
 				startMotor(motor1,-60);
 				untilPotentiometerLessThan(0,Potentiometer);
-            	stopMotor(motor1);
+                stopMotor(motor1);
 				turnLEDOff(Green);
 				turnLEDOn(Red);
 
-				// Handshake to config2.c
+				// Handshake to DoBot
 				turnLEDOff(handshakeOut);
 				wait(0.05);
 				turnLEDOn(handshakeOut);
-			}
-		}
 
-		// Iterate run count by 1
-        runCount = runCount + 1;
+                // Handshake back to start.c
+                turnLEDOff(handshakeOut);
+                wait(0.05);
+                turnLEDOn(handshakeOut);
+			}
+
+			// Iterate run count by one
+            runCount = runCount + 1;
 		}
     }
 }
