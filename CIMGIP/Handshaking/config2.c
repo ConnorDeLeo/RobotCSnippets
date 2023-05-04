@@ -21,13 +21,11 @@
 
 task estop()
 {
-    while(1==1)
-    	{
-        if(SensorValue(dgtl1) == 1)
-        	{
+    while(1==1) {
+        if(SensorValue(dgtl1) == 1) {
             // Stop all running tasks
             stopAllTasks();
-        	}
+        }
 
         wait1Msec(10);
     	}
@@ -41,14 +39,16 @@ task main()
     // Variable setter
     int runCount;
     runCount = 0;
-  turnLEDOn(dgtl11);
-  turnLEDOff(dgtl12);
+  	turnLEDOn(dgtl11);
+  	turnLEDOff(dgtl12);
 
     // Run code if count is less than 4
 	while(runCount < 4)
 	{
 		turnLEDOff(dgtl11);
-		if(SensorValue(dgtl2) == 1)							//Button to start entire system
+		
+		// Check start button
+		if(SensorValue(dgtl2) == 1)
 		{
 
 			wait(5);
@@ -81,6 +81,7 @@ task main()
 				turnLEDOn(dgtl10)
 			}
 
+			// Iterate run count by one
             runCount = runCount + 1;
 		}
     }
