@@ -77,7 +77,7 @@ task main()
 
 				// Handshake to DoBot
 				turnLEDOff(handshakeOut);
-				wait(0.05);
+				wait(0.1);
 				turnLEDOn(handshakeOut);
 
                 // Handshake back to start.c

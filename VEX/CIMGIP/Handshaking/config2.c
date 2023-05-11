@@ -79,7 +79,7 @@ task main()
 
 				// Handshake to config3.c
 				turnLEDOff(handshakeOut);
-				wait(0.05);
+				wait(0.1);
 				turnLEDOn(handshakeOut);
 			}
 
