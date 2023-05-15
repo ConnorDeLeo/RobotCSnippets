@@ -40,7 +40,7 @@ task main()
   	turnLEDOff(Green);
 
     // Run code if count is less than 4
-	while(runCount < 4)
+	while(1==1)
 	{
 		// Check start button
 		if(SensorValue(handshakeIn) == 1)
@@ -50,27 +50,27 @@ task main()
 			wait(5);
 
             // Turn	motor to 90 degrees using potentiometer
-			startMotor(motor1,60);
-			untilPotentiometerGreaterThan(90,Potentiometer);
+			startMotor(motor1,20);
+			untilPotentiometerLessThan(2750,Potentiometer);
 			stopMotor(motor1);
 
 			wait(10);
 
             // Detect if beaker is still in place
-			if(SensorValue[LightSensor] <= 20)
-			{
+			untilDark(200,LightSensor);
+
 				wait(2);
 
                 // Turn motor to 180 degrees using potentiometer
-				startMotor(motor1,60);
-				untilPotentiometerGreaterThan(180,Potentiometer);
+				startMotor(motor1,20);
+				untilPotentiometerLessThan(850,Potentiometer);
 				stopMotor(motor1);
 
 				wait(2);
 
                 // Turn motor back to
-				startMotor(motor1,-60);
-				untilPotentiometerLessThan(0,Potentiometer);
+				startMotor(motor1,-20);
+				untilPotentiometerGreaterThan(3650,Potentiometer);
                 stopMotor(motor1);
 				turnLEDOff(Green);
 				turnLEDOn(Red);
@@ -84,7 +84,7 @@ task main()
                 turnLEDOff(handshakeOut);
                 wait(0.05);
                 turnLEDOn(handshakeOut);
-			}
+
 
 			// Iterate run count by one
             runCount = runCount + 1;
